@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 using Vostok.Logging.Abstractions.Values;
-using Vostok.Logging.Abstractions.Wrappers;
 using LogLevel = Vostok.Logging.Abstractions.LogLevel;
 using MsLogLevel = Microsoft.Extensions.Logging.LogLevel;
+using VostokLogEvent = Vostok.Logging.Abstractions.LogEvent;
+using Microsoft.Extensions.Logging;
+using Vostok.Logging.Microsoft.Tests.Helpers;
 
 namespace Vostok.Logging.Microsoft.Tests
 {
@@ -64,7 +65,7 @@ namespace Vostok.Logging.Microsoft.Tests
         {
             loggerProvider.CreateLogger(null).LogInformation("message");
 
-            var expectedLogEvent = new LogEvent(LogLevel.Info, DateTimeOffset.Now, "message");
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Info, DateTimeOffset.Now, "message");
 
             log.Events.Single()
                 .Should()
@@ -78,7 +79,7 @@ namespace Vostok.Logging.Microsoft.Tests
         {
             loggerProvider.CreateLogger(null).LogDebug("message {p1} {p2}", "v1", "v2");
 
-            var expectedLogEvent = new LogEvent(LogLevel.Debug, DateTimeOffset.Now, "message {p1} {p2}")
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Debug, DateTimeOffset.Now, "message {p1} {p2}")
                 .WithProperty("p1", "v1")
                 .WithProperty("p2", "v2");
 
@@ -94,7 +95,7 @@ namespace Vostok.Logging.Microsoft.Tests
         {
             loggerProvider.CreateLogger(null).LogCritical("message {0} {1}", "v1", "v2");
 
-            var expectedLogEvent = new LogEvent(LogLevel.Fatal, DateTimeOffset.Now, "message {0} {1}")
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Fatal, DateTimeOffset.Now, "message {0} {1}")
                 .WithProperty("0", "v1")
                 .WithProperty("1", "v2");
 
@@ -110,7 +111,7 @@ namespace Vostok.Logging.Microsoft.Tests
         {
             loggerProvider.CreateLogger(null).LogInformation(new Exception("exception"), "message");
 
-            var expectedLogEvent = new LogEvent(LogLevel.Info, DateTimeOffset.Now, "message", new Exception("exception"));
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Info, DateTimeOffset.Now, "message", new Exception("exception"));
 
             log.Events.Single()
                 .Should()
@@ -128,7 +129,7 @@ namespace Vostok.Logging.Microsoft.Tests
                 logger.LogInformation("message {p1} {p2}", "v1", "v2");
             }
 
-            var expectedLogEvent = new LogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message {p1} {p2}")
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message {p1} {p2}")
                 .WithProperty("operationContext", new OperationContextValue("scope sv1 sv2"))
                 .WithProperty("sp1", "sv1")
                 .WithProperty("sp2", "sv2")
@@ -153,7 +154,7 @@ namespace Vostok.Logging.Microsoft.Tests
 
             logger.LogInformation("message {p1} {p2}", "v1", "v2");
 
-            var expectedLogEvent = new LogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message {p1} {p2}")
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message {p1} {p2}")
                 .WithProperty("p1", "v1")
                 .WithProperty("p2", "v2");
 
@@ -172,7 +173,7 @@ namespace Vostok.Logging.Microsoft.Tests
             using (logger.BeginScope(new Dictionary<string, object>() {["key2"] = "value2"}))
                 logger.LogInformation("message");
 
-            var expectedLogEvent = new LogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message")
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message")
                 .WithProperty(
                     "operationContext",
                     new OperationContextValue(
@@ -211,7 +212,7 @@ namespace Vostok.Logging.Microsoft.Tests
                 logger.LogInformation("message");
             }
 
-            var expectedLogEvent = new LogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message")
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message")
                 .WithProperty("operationContext", new OperationContextValue(new[] {"System.Collections.Generic.HashSet`1[System.String]"}));
 
             log.Events.Single()
@@ -231,7 +232,7 @@ namespace Vostok.Logging.Microsoft.Tests
                 logger.LogInformation("message {p1} {p2}", "v1", "v2");
             }
 
-            var expectedLogEvent = new LogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message {p1} {p2}")
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message {p1} {p2}")
                 .WithProperty("operationContext", new OperationContextValue(new[] {"s1", "s2"}))
                 .WithProperty("p1", "v1")
                 .WithProperty("p2", "v2");
@@ -256,7 +257,7 @@ namespace Vostok.Logging.Microsoft.Tests
         {
             loggerProvider.CreateLogger(null).LogCritical(new EventId(1, "eventId"), "message");
 
-            var expectedLogEvent = new LogEvent(LogLevel.Fatal, DateTimeOffset.Now, "message")
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Fatal, DateTimeOffset.Now, "message")
                 .WithProperty("EventId.Id", 1)
                 .WithProperty("EventId.Name", "eventId");
 
@@ -272,7 +273,7 @@ namespace Vostok.Logging.Microsoft.Tests
         {
             loggerProvider.CreateLogger(null).LogCritical(new EventId(1), "message");
 
-            var expectedLogEvent = new LogEvent(LogLevel.Fatal, DateTimeOffset.Now, "message")
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Fatal, DateTimeOffset.Now, "message")
                 .WithProperty("EventId.Id", 1);
 
             log.Events.Single()
@@ -287,7 +288,7 @@ namespace Vostok.Logging.Microsoft.Tests
         {
             loggerProvider.CreateLogger(null).LogCritical(new EventId(0, "eventId"), "message");
 
-            var expectedLogEvent = new LogEvent(LogLevel.Fatal, DateTimeOffset.Now, "message")
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Fatal, DateTimeOffset.Now, "message")
                 .WithProperty("EventId.Name", "eventId");
 
             log.Events.Single()
@@ -321,7 +322,7 @@ namespace Vostok.Logging.Microsoft.Tests
             wait.Set();
             task.Wait();
 
-            var expectedLogEvent = new LogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message")
+            var expectedLogEvent = new VostokLogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message")
                 .WithProperty("operationContext", new OperationContextValue("outer-scope"));
 
             log.Events.Single()
@@ -329,24 +330,6 @@ namespace Vostok.Logging.Microsoft.Tests
                 .BeEquivalentTo(
                     expectedLogEvent,
                     o => o.Excluding(x => x.Timestamp));
-        }
-
-        private class MemoryLog : ILog
-        {
-            public readonly List<LogEvent> Events = new List<LogEvent>();
-
-            public void Log(LogEvent @event)
-            {
-                lock (Events)
-                    Events.Add(@event);
-            }
-
-            public bool IsEnabledFor(LogLevel level) => true;
-
-            public ILog ForContext(string context)
-            {
-                return new SourceContextWrapper(this, context);
-            }
         }
     }
 }

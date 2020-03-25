@@ -1,7 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Internal;
 using Vostok.Logging.Abstractions;
 using Vostok.Logging.Abstractions.Wrappers;
 using Vostok.Logging.Formatting;
@@ -14,7 +13,6 @@ namespace Vostok.Logging.Microsoft
     public sealed class MicrosoftLog : ILog
     {
         private const int NullEventId = 0;
-        private static readonly Func<FormattedLogValues, Exception, string> MessageFormatter = FormatMessage;
         private static readonly OutputTemplate Template = OutputTemplate.Parse(
             $"{{{WellKnownProperties.TraceContext}:w}}" +
             $"{{{WellKnownProperties.OperationContext}:w}}" +
@@ -35,28 +33,28 @@ namespace Vostok.Logging.Microsoft
             if (@event is null)
                 return;
 
-            if (!IsEnabledFor(@event.Level))
+            var logLevel = TranslateLogLevel(@event.Level);
+            if (!IsEnabledFor(logLevel))
                 return;
 
-            var logLevel = ConvertLogLevel(@event.Level);
+            logger.Log(logLevel, NullEventId, new VostokLogEventWrapper(@event), @event.Exception, FormatMessage);
 
-            var message = settings.UseVostokTemplate
-                ? LogEventFormatter.Format(@event, Template)
-                : LogMessageFormatter.Format(@event);
-
-            var state = new FormattedLogValues(message, Array.Empty<object>());
-
-            logger.Log(logLevel, NullEventId, state, @event.Exception, MessageFormatter);
-        }
-
-        private static string FormatMessage(FormattedLogValues state, Exception error)
-        {
-            return state.ToString();
+            string FormatMessage(VostokLogEventWrapper logEventWrapper, Exception ex)
+            {
+                return settings.UseVostokTemplate
+                    ? LogEventFormatter.Format(logEventWrapper.LogEvent, Template)
+                    : LogMessageFormatter.Format(logEventWrapper.LogEvent);
+            }
         }
 
         public bool IsEnabledFor(VostokLogLevel level)
         {
-            var logLevel = ConvertLogLevel(level);
+            var logLevel = TranslateLogLevel(level);
+            return IsEnabledFor(logLevel);
+        }
+
+        private bool IsEnabledFor(MicrosoftLogLevel logLevel)
+        {
             return logger.IsEnabled(logLevel);
         }
 
@@ -65,7 +63,7 @@ namespace Vostok.Logging.Microsoft
             return new SourceContextWrapper(this, context);
         }
 
-        private static MicrosoftLogLevel ConvertLogLevel(VostokLogLevel logLevel)
+        private static MicrosoftLogLevel TranslateLogLevel(VostokLogLevel logLevel)
         {
             switch (logLevel)
             {
