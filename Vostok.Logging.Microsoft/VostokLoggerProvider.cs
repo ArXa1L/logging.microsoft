@@ -61,7 +61,6 @@ namespace Vostok.Logging.Microsoft
         {
         }
 
-        // TODO(dstarasov): Не забыть про изменение модификатора доступа с Private на Public
         internal class Logger : ILogger
         {
             private readonly ILog log;
