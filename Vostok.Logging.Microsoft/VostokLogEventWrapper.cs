@@ -7,12 +7,12 @@ namespace Vostok.Logging.Microsoft
 {
     internal sealed class VostokLogEventWrapper : IEnumerable<KeyValuePair<string, object>>
     {
-        public LogEvent LogEvent { get; }
-
         public VostokLogEventWrapper(LogEvent logEvent)
         {
             LogEvent = logEvent;
         }
+
+        public LogEvent LogEvent { get; }
 
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {

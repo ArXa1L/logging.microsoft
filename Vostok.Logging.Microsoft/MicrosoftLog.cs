@@ -53,11 +53,6 @@ namespace Vostok.Logging.Microsoft
             return IsEnabledFor(logLevel);
         }
 
-        private bool IsEnabledFor(MicrosoftLogLevel logLevel)
-        {
-            return logger.IsEnabled(logLevel);
-        }
-
         public ILog ForContext(string context)
         {
             return new SourceContextWrapper(this, context);
@@ -80,6 +75,11 @@ namespace Vostok.Logging.Microsoft
                 default:
                     return MicrosoftLogLevel.None;
             }
+        }
+
+        private bool IsEnabledFor(MicrosoftLogLevel logLevel)
+        {
+            return logger.IsEnabled(logLevel);
         }
     }
 }

@@ -4,14 +4,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 using Vostok.Logging.Abstractions.Values;
+using Vostok.Logging.Microsoft.Tests.Helpers;
 using LogLevel = Vostok.Logging.Abstractions.LogLevel;
 using MsLogLevel = Microsoft.Extensions.Logging.LogLevel;
 using VostokLogEvent = Vostok.Logging.Abstractions.LogEvent;
-using Microsoft.Extensions.Logging;
-using Vostok.Logging.Microsoft.Tests.Helpers;
 
 namespace Vostok.Logging.Microsoft.Tests
 {
@@ -169,8 +169,8 @@ namespace Vostok.Logging.Microsoft.Tests
         public void Log_InScopeWithNamedProperties_LogsWithAllScopeProperties()
         {
             var logger = loggerProvider.CreateLogger(null);
-            using (logger.BeginScope(new Dictionary<string, object>() {["key"] = "value"}))
-            using (logger.BeginScope(new Dictionary<string, object>() {["key2"] = "value2"}))
+            using (logger.BeginScope(new Dictionary<string, object> {["key"] = "value"}))
+            using (logger.BeginScope(new Dictionary<string, object> {["key2"] = "value2"}))
                 logger.LogInformation("message");
 
             var expectedLogEvent = new VostokLogEvent(LogLevel.Info, DateTimeOffset.UtcNow, "message")

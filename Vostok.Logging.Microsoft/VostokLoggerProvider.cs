@@ -74,8 +74,12 @@ namespace Vostok.Logging.Microsoft
                 this.ignoredScopes = ignoredScopes;
             }
 
-            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, 
-                                    Func<TState, Exception, string> formatter)
+            public void Log<TState>(
+                LogLevel logLevel,
+                EventId eventId,
+                TState state,
+                Exception exception,
+                Func<TState, Exception, string> formatter)
             {
                 if (logLevel == LogLevel.None)
                     return;
@@ -182,8 +186,6 @@ namespace Vostok.Logging.Microsoft
 
             private class UseScope : IDisposable
             {
-                public ILog Log { get; }
-
                 private readonly OperationContextToken operationContextToken;
                 private readonly AsyncLocal<UseScope> scope;
                 private readonly UseScope previousScopeValue;
@@ -196,6 +198,8 @@ namespace Vostok.Logging.Microsoft
                     previousScopeValue = scope.Value;
                     scope.Value = this;
                 }
+
+                public ILog Log { get; }
 
                 public void Dispose()
                 {

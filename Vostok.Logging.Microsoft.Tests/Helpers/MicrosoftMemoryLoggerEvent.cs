@@ -14,7 +14,7 @@ namespace Vostok.Logging.Microsoft.Tests.Helpers
         public object Scope { get; set; }
 
         public string Message { get; set; }
-        
+
         public string Category { get; set; }
     }
 }

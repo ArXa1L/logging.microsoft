@@ -276,7 +276,7 @@ namespace Vostok.Logging.Microsoft.Tests
             };
 
             microsoftLog.ForContext(context).Warn("message");
-            
+
             microsoftLogger.Events.Single().Should().BeEquivalentTo(expectedLogEvent);
         }
 

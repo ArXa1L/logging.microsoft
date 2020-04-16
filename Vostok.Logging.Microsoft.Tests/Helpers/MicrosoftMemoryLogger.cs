@@ -7,12 +7,13 @@ namespace Vostok.Logging.Microsoft.Tests.Helpers
     internal class MicrosoftMemoryLogger : ILogger
     {
         private readonly string categoryName;
-        public ConcurrentQueue<MicrosoftMemoryLoggerEvent> Events { get; } = new ConcurrentQueue<MicrosoftMemoryLoggerEvent>();
 
         public MicrosoftMemoryLogger(string categoryName)
         {
             this.categoryName = categoryName;
         }
+
+        public ConcurrentQueue<MicrosoftMemoryLoggerEvent> Events { get; } = new ConcurrentQueue<MicrosoftMemoryLoggerEvent>();
 
         public IDisposable BeginScope<TState>(TState state)
         {
