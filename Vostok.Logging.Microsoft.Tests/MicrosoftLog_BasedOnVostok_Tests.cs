@@ -49,7 +49,7 @@ namespace Vostok.Logging.Microsoft.Tests
 
             microsoftLog.Log(expectedLogEvent);
 
-            oracleLog.Events.Single().Should().BeEquivalentTo(expectedLogEvent);
+            oracleLog.Events.Single().Should().BeSameAs(expectedLogEvent);
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace Vostok.Logging.Microsoft.Tests
 
             microsoftLog.Log(expectedLogEvent);
 
-            oracleLog.Events.Single().Should().BeEquivalentTo(expectedLogEvent);
+            oracleLog.Events.Single().Should().BeSameAs(expectedLogEvent);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Vostok.Logging.Microsoft.Tests
 
             microsoftLog.Log(expectedLogEvent);
 
-            oracleLog.Events.Single().Should().BeEquivalentTo(expectedLogEvent);
+            oracleLog.Events.Single().Should().BeSameAs(expectedLogEvent);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace Vostok.Logging.Microsoft.Tests
 
             microsoftLog.Log(expectedLogEvent);
 
-            oracleLog.Events.Single().Should().BeEquivalentTo(expectedLogEvent);
+            oracleLog.Events.Single().Should().BeSameAs(expectedLogEvent);
         }
 
         [Test]
@@ -142,6 +142,7 @@ namespace Vostok.Logging.Microsoft.Tests
         public void Log_WithComplexMicrosoftLoggerScopeAndException_LogsValidEvent()
         {
             var exception = new Exception("exception");
+
             var expectedLogEvent = new VostokLogEvent(LogLevel.Info, DateTimeOffset.Now, "message", exception)
                 .WithProperty("operationContext", new OperationContextValue("{ id = 1, name = 2 }"));
 
@@ -151,7 +152,7 @@ namespace Vostok.Logging.Microsoft.Tests
 
                 oracleLog.Events.Single()
                     .Should()
-                    .BeEquivalentTo(expectedLogEvent, o => o.Excluding(x => x.Timestamp));
+                    .BeEquivalentTo(expectedLogEvent);
             }
         }
     }

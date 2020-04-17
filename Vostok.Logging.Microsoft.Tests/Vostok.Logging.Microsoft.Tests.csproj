@@ -21,7 +21,6 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0"/>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0"/>
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0"/>
-    <PackageReference Include="Vostok.Commons.Collections" Version="0.1.3"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -33,8 +32,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\vostok.logging.abstractions\Vostok.Logging.Abstractions\bin\Release\netstandard2.0\Vostok.Logging.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Vostok.Logging.Formatting, Version=1.0.5.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="Vostok.Logging.Formatting">
       <HintPath>..\..\vostok.logging.formatting\Vostok.Logging.Formatting\bin\Release\netstandard2.0\Vostok.Logging.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="Vostok.Commons.Collections">
+      <HintPath>..\..\vostok.commons.collections\Vostok.Commons.Collections\bin\Release\netstandard2.0\Vostok.Commons.Collections.dll</HintPath>
     </Reference>
   </ItemGroup>
 

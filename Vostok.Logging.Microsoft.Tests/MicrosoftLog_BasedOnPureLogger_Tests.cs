@@ -127,7 +127,6 @@ namespace Vostok.Logging.Microsoft.Tests
                 Category = TestCategoryName,
                 LogLevel = MsLogLevel.Information,
                 Message = "message",
-                Scope = scope,
                 State = new ImmutableArrayDictionary<string, object>(
                     new Dictionary<string, object>
                     {
@@ -155,7 +154,6 @@ namespace Vostok.Logging.Microsoft.Tests
                 Category = TestCategoryName,
                 LogLevel = MsLogLevel.Information,
                 Message = "message",
-                Scope = scope2,
                 State = new ImmutableArrayDictionary<string, object>(
                     new Dictionary<string, object>
                     {
@@ -184,7 +182,6 @@ namespace Vostok.Logging.Microsoft.Tests
                 LogLevel = MsLogLevel.Information,
                 Message = "message",
                 Exception = exception,
-                Scope = scope,
                 State = new ImmutableArrayDictionary<string, object>(
                     new Dictionary<string, object>
                     {
@@ -211,7 +208,6 @@ namespace Vostok.Logging.Microsoft.Tests
                 Category = TestCategoryName,
                 LogLevel = MsLogLevel.Information,
                 Message = "message",
-                Scope = scope,
                 State = new ImmutableArrayDictionary<string, object>(
                     new Dictionary<string, object>
                     {
@@ -239,7 +235,6 @@ namespace Vostok.Logging.Microsoft.Tests
                 Category = TestCategoryName,
                 LogLevel = MsLogLevel.Information,
                 Message = "message",
-                Scope = scope,
                 Exception = exception,
                 State = new ImmutableArrayDictionary<string, object>(
                     new Dictionary<string, object>
