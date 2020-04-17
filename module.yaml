@@ -14,6 +14,7 @@ notests *default:
     - vostok.logging.context
     - vostok.logging.formatting
     - vostok.commons.helpers/src
+    - vostok.commons.collections
 
 full-build > notests:
   build:
